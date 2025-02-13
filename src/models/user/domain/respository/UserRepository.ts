@@ -2,9 +2,9 @@ import { Password } from "../entity/password/Password";
 import { User } from "../entity/user/User";
 
 export interface UserRepository{
-    createPassword(_id: string, password: string): Promise<Password>  
-    getPassword(_id:string): Promise<Password | null>;
-    changePassword(_id:string, password:Password): Promise<Password | null>;
+    createPassword(_id: string, password: string): Promise<string>  
+    getPassword(_id:string): Promise<string | null>;
+    changePassword(_id:string, password:string): Promise<string | null>;
     
     create(user: {username:string,email:string, _id:string}): Promise<User | null>;
     findAll(): Promise<User[] | null>;

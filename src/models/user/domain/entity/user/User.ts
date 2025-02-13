@@ -37,6 +37,11 @@ export class User {
     this.updatedAt = new Date();
   }
 
+  deleteAddress(_id: string) {
+    this.addressData = this.addressData.filter(i=>i._id !== _id)
+    this.updatedAt = new Date();
+  }
+
   addFavorite(favorite: Favorite) {
     this.favoritesData.push(favorite);
     this.updatedAt = new Date();

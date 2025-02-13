@@ -12,19 +12,19 @@ export class MongoUserRepository implements UserRepository {
         @InjectModel(PasswordS.name) private readonly passwordModel: Model<PasswordDocument>
     ) {}
     
-    async createPassword(_id: string, password: string): Promise<Password>{
+    async createPassword(_id: string, password: string): Promise<string>{
         const res = await new this.passwordModel({password, _id}).save()
-        return new Password(res.password, res.id) 
+        return res.password
     }
     
-    async getPassword(_id:string): Promise<Password | null>{
+    async getPassword(_id:string): Promise<string | null>{
         const res = await this.passwordModel.findById(_id)
-        return res? new Password (res.password, res.id):null
+        return res? res.password:null
     }
 
-    async changePassword(_id:string, password:Password): Promise<Password | null>{
-        const res = await this.passwordModel.findByIdAndUpdate(_id, password)
-        return res? new Password(res.password, res._id): null
+    async changePassword(_id:string, password:string): Promise<string | null>{
+        const res = await this.passwordModel.findByIdAndUpdate(_id, {password})
+        return res? res.password: null
     }
     
     async create(user: { username: string, email: string, _id: string }): Promise<User | null> {

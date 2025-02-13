@@ -7,6 +7,9 @@ import { MongooseModule } from "@nestjs/mongoose";
 import { UserS, UserSchema } from "./infrastructure/persistence/mongoDb/UserDocument";
 import { MongoUserRepository } from "./infrastructure/persistence/mongoDb/MongoUserRespository";
 import { PasswordS, PasswordSchema } from "./infrastructure/persistence/mongoDb/PasswordDocument";
+import { ChangePasswordUseCase } from "./domain/usecases/ChangePasswordUseCase";
+import { AddAddressUseCase } from "./domain/usecases/AddAddressUseCase";
+import { DeleteAddress } from "./domain/usecases/DeleteAddressUseCase";
 
 
 @Module({
@@ -21,6 +24,9 @@ import { PasswordS, PasswordSchema } from "./infrastructure/persistence/mongoDb/
     },
     RegisterUserUseCase,
     LoginUserUseCase,
+    ChangePasswordUseCase,
+    AddAddressUseCase,
+    DeleteAddress,
     UserService,
   ],
   controllers: [UserController]

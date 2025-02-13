@@ -11,7 +11,7 @@ export class LoginUserUseCase {
         const passRes = await this.db.getPassword(user._id)
         if(!passRes) return "password no encontrado"
         
-        const matchPassword = await bcrypt.compare(password, passRes.password)
+        const matchPassword = await bcrypt.compare(password, passRes)
         if (!matchPassword) return "contrasenia invalida"
         
         return user
