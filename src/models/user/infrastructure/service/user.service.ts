@@ -47,4 +47,12 @@ export class UserService{
         const res = await this.deleteAddress.execute(data.userId, data.addressId)
         return res
     }
+
+    async addFavorite(){
+
+    }
+
+    async putFavorite(){
+        
+    }
 }

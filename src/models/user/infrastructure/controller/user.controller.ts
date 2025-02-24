@@ -5,7 +5,6 @@ import { RegisterUserDto } from "../../application/dtos/register-user.dto";
 import { LoginUserDto } from "../../application/dtos/login-user.dto";
 import { PasswordUserDto } from "../../application/dtos/password-user.dtp";
 import { AddressUserDto } from "../../application/dtos/address-user.dto";
-import { DeleteAddress } from "../../domain/usecases/DeleteAddressUseCase";
 import { DeleteAddressUserDto } from "../../application/dtos/delete-address-user.dto";
 @Controller("user")
 export class UserController{
@@ -20,7 +19,7 @@ export class UserController{
         return await this.userService.login(loginUserDto)
     }
 
-    @Post("/change-password")
+    @Post("/password")
     async changePassword(@Body() updatePassword: PasswordUserDto):Promise<string | null>{
         return await this.userService.updatePassword(updatePassword)
     }
