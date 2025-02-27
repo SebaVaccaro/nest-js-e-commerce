@@ -1,16 +1,17 @@
 import { Inject } from "@nestjs/common";
 import { UserRepository } from "../respository/UserRepository";
 import { User } from "../entity/user/User";
+import { ResponseDocument } from "../entity/response/ResponseDocument";
 
 export class DeleteAddress{
     constructor(@Inject("UserRepository") private readonly userRepository: UserRepository){}
 
-    async execute(userId:string, addresId:string):Promise<User|string>{
+    async execute(userId:string, addresId:string):Promise<ResponseDocument>{
         const user = await this.userRepository.findById(userId)
-        if(!user)return "usuario no encontrado"
+        if(!user)return new ResponseDocument(false,"usuario no encontrado")
         user.deleteAddress(addresId)
         const res = await this.userRepository.update(user)
-        if(!res)return "no fue posible actualizar el usuario, errore de servidor"
-        return res
+        if(!res)return new ResponseDocument(false,"problemas de servidor")
+        return new ResponseDocument(true, "se elimino correctamente la direccion")
     }
 }
