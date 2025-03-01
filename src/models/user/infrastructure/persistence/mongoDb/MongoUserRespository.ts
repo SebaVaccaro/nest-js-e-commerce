@@ -3,8 +3,8 @@ import { Model } from "mongoose";
 import { UserDocument, UserS } from "./UserDocument";
 import { PasswordDocument, PasswordS } from "./PasswordDocument";
 import { UserRepository } from "src/models/user/domain/respository/UserRepository";
-import { Password } from "src/models/user/domain/entity/password/Password";
 import { User } from "src/models/user/domain/entity/user/User";
+import { Password } from "src/models/user/domain/entity/password/Password";
 
 export class MongoUserRepository implements UserRepository {
     constructor(
@@ -12,21 +12,22 @@ export class MongoUserRepository implements UserRepository {
         @InjectModel(PasswordS.name) private readonly passwordModel: Model<PasswordDocument>
     ) {}
     
-    async createPassword(_id: string, password: string): Promise<string>{
+    async createPassword(_id: string, password: string): Promise<Password | null>{
         const res = await new this.passwordModel({password, _id}).save()
-        return res.password
+        return res? this.transformPassword(res) : null
     }
     
-    async getPassword(_id:string): Promise<string | null>{
+    async getPassword(_id:string): Promise<Password | null>{
         const res = await this.passwordModel.findById(_id)
-        return res? res.password:null
+        return res? this.transformPassword(res):null
     }
 
-    async changePassword(_id:string, password:string): Promise<string | null>{
+    async changePassword(_id:string, password:string): Promise<Password | null>{
         const res = await this.passwordModel.findByIdAndUpdate(_id, {password})
-        return res? res.password: null
+        return res? this.transformPassword(res):null
     }
     
+
     async create(user: { username: string, email: string, _id: string }): Promise<User | null> {
         const res = await new this.userModel({
             username: user.username,
@@ -56,8 +57,9 @@ export class MongoUserRepository implements UserRepository {
         return res? this.transform(res) : null
     }
 
-    async delete(_id: string): Promise<void> {
-        await this.userModel.findByIdAndDelete(_id);
+    async delete(_id: string): Promise<User | null> {
+       const res = await this.userModel.findByIdAndDelete(_id);
+       return res? this.transform(res) : null
     }
 
     transform(u: UserS): User{
@@ -72,5 +74,8 @@ export class MongoUserRepository implements UserRepository {
             u.updatedAt
         )
         
+    }
+    transformPassword(p: PasswordS): Password{
+        return new Password(p.password, p._id)
     }
 }
